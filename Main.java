@@ -3,6 +3,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner teclado = new Scanner(System.in);
+        GeneralTree arv = new GeneralTree();
+        int[][] finalTabuleiro = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 0}
+       };
         int[][] tabuleiro1 = {
             {1, 2, 3},
             {4, 5, 6},
@@ -29,7 +35,6 @@ public class Main {
             {4, 8, 5}
        };
        Tabuleiro tabuleiro = new Tabuleiro(tabuleiro1);
-       System.out.println("Tabuleiro 1: ");
        System.out.println(tabuleiro);
        int opcao = 0;
        do{
@@ -43,6 +48,8 @@ public class Main {
             System.out.println("0 - Sair");
             opcao = teclado.nextInt();
             if(opcao == 1){
+                System.out.println("Tabuleiro 1: ");
+                arv.add(tabuleiro1, null);
             }
             if(opcao == 2){
             }
