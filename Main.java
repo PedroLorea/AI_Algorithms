@@ -34,6 +34,8 @@ public class Main {
             {7, 0, 6},
             {4, 8, 5}
        };
+
+       arv.add(tabuleiro1, null);       
        Tabuleiro tabuleiro = new Tabuleiro(tabuleiro1);
        System.out.println(tabuleiro);
        int opcao = 0;
@@ -49,7 +51,7 @@ public class Main {
             opcao = teclado.nextInt();
             if(opcao == 1){
                 System.out.println("Tabuleiro 1: ");
-                arv.add(tabuleiro1, null);
+                
             }
             if(opcao == 2){
             }

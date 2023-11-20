@@ -2,7 +2,7 @@
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class GeneralTree {
+public class GeneralTree implements IAlgorithms{
 
     // Classe interna Node
     private class Node {
@@ -114,7 +114,7 @@ public class GeneralTree {
     public boolean removeBranch(int[][] element) {
         boolean b = false;
         if (root != null) {
-            if (Arrays.deepEquals(root.getElement(),element)) { 
+            if (Arrays.deepEquals(root.getElement(),element)){ 
                 root = null;
                 count = 0;
                 b = true;
@@ -182,5 +182,102 @@ public class GeneralTree {
             lista.add(n.element); // visita a raiz            
         }    
     }    
+    public void solveBreadthFirstl(int initialMatrix[][], int finalMatrix[][], int x, int y){
+        LinkedList<int[][]> lista = new LinkedList<>();
+        GeneralTree arv = new GeneralTree();
+        arv.add(initialMatrix, null); //root        
+        Queue<Node> fila = new Queue<>();
+        Node atual = null;
+        int[][] aux = new int[initialMatrix.length][initialMatrix[0].length];
+        if (root != null) {
+            fila.enqueue(root);
+            while (!fila.isEmpty()) {
+                if(x == 2 && y == 0){
+                    for(int i = 0; i < initialMatrix.length; i++){
+                        for(int j = 0; j < initialMatrix.length - 1; j++){
+                            aux[i][j] = initialMatrix[i][j];
+                        }
+                    }
+                }
+                atual = fila.dequeue();
+                lista.add(atual.element);
+                for (int i = 0; i < atual.getSubtreesSize(); i++) {
+                    fila.enqueue(atual.getSubtree(i));
+                }
+            }
+        }
+        
+    }
+
+    public void solveBreadthFirst(int[][] initialMatrix, int[][] finalMatrix, int x, int y) {
+        GeneralTree arv = new GeneralTree();
+        arv.add(initialMatrix, null); // Root
+        Queue<Node> fila = new Queue<>();
+        Node atual = null;
+        fila.enqueue(root);
+
+        while (!fila.isEmpty()) {
+            atual = fila.dequeue();
+            int[][] aux = atual.getElement();
+
+            // Verifique se o estado atual é a solução
+            if (isSolution(aux, finalMatrix)) {
+                aux.toString();
+                System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.")
+                return;
+            }
+
+            // Gere os estados filhos movendo o zero para cima, baixo, esquerda ou direita
+            generateAndAddChild(arv, fila, aux, x, y, x - 1, y); // Movimento para cima
+            generateAndAddChild(arv, fila, aux, x, y, x + 1, y); // Movimento para baixo
+            generateAndAddChild(arv, fila, aux, x, y, x, y - 1); // Movimento para a esquerda
+            generateAndAddChild(arv, fila, aux, x, y, x, y + 1); // Movimento para a direita
+        }
+    }
+
+    private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
+                                            int[][] parentMatrix, int zeroRow, int zeroCol,
+                                            int newZeroRow, int newZeroCol) {
+        if (isValidPosition(newZeroRow, newZeroCol, parentMatrix.length, parentMatrix[0].length)) {
+            int[][] childMatrix = createChildMatrix(parentMatrix, zeroRow, zeroCol, newZeroRow, newZeroCol);
+            arv.add(childMatrix, parentMatrix); // Adicione o nó à árvore
+            fila.add(arv.getNode(childMatrix)); // Adicione o nó à fila
+        }
+    }
+
+    private static boolean isValidPosition(int row, int col, int numRows, int numCols) {
+        return row >= 0 && row < numRows && col >= 0 && col < numCols;
+    }
+
+    private static boolean isSolution(int[][] currentMatrix, int[][] finalMatrix) {
+        // Implemente a lógica para verificar se a matriz atual é a solução
+        // Comparando com a matriz final.
+        return false;
+    }
+
+    private static int[][] createChildMatrix(int[][] parentMatrix, int zeroRow, int zeroCol, int newZeroRow, int newZeroCol) {
+        // Crie uma nova matriz com base na matriz pai, movendo o zero para a nova posição
+        int[][] childMatrix = new int[parentMatrix.length][parentMatrix[0].length];
+        for (int i = 0; i < parentMatrix.length; i++) {
+            System.arraycopy(parentMatrix[i], 0, childMatrix[i], 0, parentMatrix[0].length);
+        }
+        childMatrix[zeroRow][zeroCol] = parentMatrix[newZeroRow][newZeroCol];
+        childMatrix[newZeroRow][newZeroCol] = 0;
+        return childMatrix;
+    }
+
+
+    public void solveDeapthFirst(int initialMatrix[][], int finalMatrix[][], int x, int y){
+
+    }
+
+
+    public void solveGreedyBestFirst(int initialMatrix[][], int finalMatrix[][], int x, int y){
+
+    }
+
     
+    public void solveAStar(int initialMatrix[][], int finalMatrix[][], int x, int y){
+
+    }
 }
