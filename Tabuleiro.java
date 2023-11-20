@@ -1,7 +1,7 @@
 public class Tabuleiro {
 
-    private int[][] tabuleiro;
-    private int jogadas;
+    private final int[][] tabuleiro;
+
     
     Tabuleiro(int[][] tabuleiro){
         this.tabuleiro = tabuleiro;
@@ -9,10 +9,6 @@ public class Tabuleiro {
 
     public int[][] getTabuleiro1(){        
         return tabuleiro;
-    }
-
-    public int getJogadas(){
-        return jogadas;
     }
 
     @Override
@@ -35,5 +31,57 @@ public class Tabuleiro {
         }
         result.append("\n---------\n");
         return result.toString();
+    }
+
+    public void desenhaTabuleiroComSetas(int zeroRow,int zeroCol,int newZeroRow,int newZeroCol){
+        StringBuilder resultado = new StringBuilder();
+
+        //calcula direção da seta
+        String direcao;
+        if(zeroRow == newZeroRow){
+            if(zeroCol < newZeroCol){
+                direcao = "←";
+            }else{
+                direcao = "→";
+            }
+        }else{
+            if(zeroRow < newZeroRow){
+                direcao = "↑";
+            }else{
+                direcao = "↓";
+            }
+        }
+
+
+        resultado.append("----------------\n");
+        // Desenha o tabuleiro
+        for (int[] ints : tabuleiro) {
+            for (int anInt : ints) {
+                if (anInt == 0) {
+                    resultado.append("| ").append(" ").append(direcao).append(" ");
+                } else {
+                    resultado.append("| ").append(" ").append(anInt).append(" ");
+                }
+            }
+            resultado.append("|\n");
+        }
+        resultado.append("----------------");
+        System.out.println(resultado);
+    }
+
+    public void desenhaTabuleiro() {
+        StringBuilder resultado = new StringBuilder();
+
+        resultado.append("----------------\n");
+        // Desenha o tabuleiro
+        for (int[] ints : tabuleiro) {
+            for (int anInt : ints) {
+                resultado.append("| ").append(anInt < 10 ? " " : "").append(anInt).append(" ");
+            }
+            resultado.append("|\n");
+        }
+        resultado.append("----------------");
+
+        System.out.println(resultado);
     }
 }

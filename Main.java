@@ -9,6 +9,11 @@ public class Main {
             {4, 5, 6},
             {7, 8, 0}
        };
+        int[][] tabuleiro0 = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 0, 8}
+        };
         int[][] tabuleiro1 = {
             {1, 2, 3},
             {4, 5, 6},
@@ -35,6 +40,8 @@ public class Main {
             {4, 8, 5}
        };
 
+       Tabuleiro tabuleiro_tabuleiro1 = new Tabuleiro(tabuleiro1);
+
        //arv.add(tabuleiro1, null);       
        //Tabuleiro tabuleiro = new Tabuleiro(tabuleiro1);
        //System.out.println(tabuleiro);
@@ -49,25 +56,29 @@ public class Main {
             System.out.println("    4 - A* search");
             System.out.println("0 - Sair");
             opcao = teclado.nextInt();
-            if(opcao == 1){
-                System.out.println("Tabuleiro 1: ");
-                arv.solveBreadthFirst(tabuleiro1, finalTabuleiro, 2, 0);
-                
+            switch (opcao){
+                case 1:
+                    System.out.println("Breadth-first Search");
+                    System.out.println("Tabuleiro 1: ");
+                    arv.solveBreadthFirst(tabuleiro5, finalTabuleiro, 1, 1);
+                    break;
+                case 2:
+                    System.out.println("Depth-first Search");
+                    break;
+                case 3:
+                    System.out.println("Greedy best-first Search");
+                    break;
+                case 4:
+                    System.out.println("A* search");
+                    arv.solveAStar(tabuleiro5, finalTabuleiro, 1, 1);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opcao invalida. Por favor tente novamente.");
+                    break;
             }
-            if(opcao == 2){
-            }
-            if(opcao == 3){
-            }
-            if(opcao == 4){
-            }
-            if(opcao == 0){
-                System.exit(1);
-
-            }
-            else{
-                System.out.println("Opcao invalida. Por favor tente novamente.");
-            }
-        
        }while(opcao != 0);
     }
 
