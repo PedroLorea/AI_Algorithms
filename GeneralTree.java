@@ -1,5 +1,6 @@
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class GeneralTree implements IAlgorithms{
@@ -234,53 +235,59 @@ public class GeneralTree implements IAlgorithms{
     }
 
     public void solveBreadthFirst(int[][] initialMatrix, int[][] finalMatrix, int x, int y) {
-        initialMatrix.toString();
-        GeneralTree arv = new GeneralTree();
-        arv.add(initialMatrix, null); // Root
-        Queue<Node> fila = new Queue<>();
-        Node atual = null;
-        fila.enqueue(root);
-        fila.toString();
-        while (!fila.isEmpty()) {
-            System.out.println("Entrou no while");
-            System.out.println("Tamanho da fila " + fila.size());
-            fila.toString();
-            atual = fila.dequeue();
-            int[][] aux = atual.getElement();
+    GeneralTree arv = new GeneralTree();
+    arv.add(initialMatrix, null); // Root
+    initialMatrix.toString();
+    Queue<Node> fila = new Queue<>();
+    HashSet<Node> visitados = new HashSet<>(); // Adicione esta linha para marcar nós visitados
+    Node atual = null;
+    fila.enqueue(arv.getNode(initialMatrix));
+    
+    while (!fila.isEmpty()) {
+        atual = fila.dequeue();
+        visitados.add(atual); // Marcar o nó como visitado
 
-            // Verifique se o estado atual é a solução
-            if (isSolution(aux, finalMatrix)) {
-                aux.toString();
-                System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.");
-                return;
-            }
+        int[][] aux = atual.getElement();
 
-            // Gere os estados filhos movendo o zero para cima, baixo, esquerda ou direita
-            generateAndAddChild(arv, fila, aux, x, y, x - 1, y); // Movimento para cima
-            generateAndAddChild(arv, fila, aux, x, y, x + 1, y); // Movimento para baixo
-            generateAndAddChild(arv, fila, aux, x, y, x, y - 1); // Movimento para a esquerda
-            generateAndAddChild(arv, fila, aux, x, y, x, y + 1); // Movimento para a direita
+        // Verifique se o estado atual é a solução
+        if (isSolution(aux, finalMatrix)) {
+            aux.toString();
+            System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.");
+            return;
         }
-    }
 
-    private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
-                                            int[][] parentMatrix, int zeroRow, int zeroCol,
-                                            int newZeroRow, int newZeroCol) {
-        if (isValidPosition(newZeroRow, newZeroCol, parentMatrix.length, parentMatrix[0].length)) {
-            int[][] childMatrix = createChildMatrix(parentMatrix, zeroRow, zeroCol, newZeroRow, newZeroCol);
+        // Gere os estados filhos movendo o zero para cima, baixo, esquerda ou direita
+        generateAndAddChild(arv, fila, aux, x, y, x - 1, y, visitados); // Movimento para cima
+        generateAndAddChild(arv, fila, aux, x, y, x + 1, y, visitados); // Movimento para baixo
+        generateAndAddChild(arv, fila, aux, x, y, x, y - 1, visitados); // Movimento para a esquerda
+        generateAndAddChild(arv, fila, aux, x, y, x, y + 1, visitados); // Movimento para a direita
+    }
+}
+
+private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
+                                        int[][] parentMatrix, int zeroRow, int zeroCol,
+                                        int newZeroRow, int newZeroCol, HashSet<Node> visitados) {
+    if (isValidPosition(newZeroRow, newZeroCol, parentMatrix.length, parentMatrix[0].length)) {
+        int[][] childMatrix = createChildMatrix(parentMatrix, zeroRow, zeroCol, newZeroRow, newZeroCol);
+        Node childNode = arv.getNode(childMatrix);
+
+        // Verificar se o nó filho já foi visitado
+        if (!visitados.contains(childNode)) {
             arv.add(childMatrix, parentMatrix); // Adicione o nó à árvore
-            fila.enqueue(arv.getNode(childMatrix)); // Adicione o nó à fila
+            fila.enqueue(childNode); // Adicione o nó à fila
             childMatrix.toString();
         }
     }
+}
 
     private static boolean isValidPosition(int row, int col, int numRows, int numCols) {
         return row >= 0 && row < numRows && col >= 0 && col < numCols;
     }
 
     private static boolean isSolution(int[][] currentMatrix, int[][] finalMatrix) {
-        // Implemente a lógica para verificar se a matriz atual é a solução
-        // Comparando com a matriz final.
+        if(Arrays.deepEquals(currentMatrix, finalMatrix)){
+            return true;
+        }
         return false;
     }
 
@@ -292,6 +299,7 @@ public class GeneralTree implements IAlgorithms{
         }
         childMatrix[zeroRow][zeroCol] = parentMatrix[newZeroRow][newZeroCol];
         childMatrix[newZeroRow][newZeroCol] = 0;
+        childMatrix.toString();
         return childMatrix;
     }
 
@@ -309,4 +317,57 @@ public class GeneralTree implements IAlgorithms{
     public void solveAStar(int initialMatrix[][], int finalMatrix[][], int x, int y){
 
     }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("\n---------\n");
+
+        if (root != null) {
+            result.append(nodeToString(root, 0)); // Inicia a recursão com nível 0
+        }
+
+        result.append("\n---------\n");
+        return result.toString();
+    }
+
+    private String nodeToString(Node node, int level) {
+        int[][] tabuleiro = node.getElement();
+        StringBuilder result = new StringBuilder();
+
+        // Adiciona espaços de acordo com o nível para representar a árvore
+        for (int i = 0; i < level; i++) {
+            result.append("    ");
+        }
+
+        for (int i = 0; i < tabuleiro.length; i++) {
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+                result.append(tabuleiro[i][j]);
+
+                if (j < tabuleiro[i].length - 1) {
+                    result.append(" | ");
+                }
+            }
+
+            if (i < tabuleiro.length - 1) {
+                result.append("\n");
+
+                // Adiciona espaços de acordo com o nível para representar a árvore
+                for (int k = 0; k < level; k++) {
+                    result.append("    ");
+                }
+
+                result.append("---------\n");
+            }
+        }
+
+        result.append("\n");
+
+        // Itera sobre os filhos e chama recursivamente o método nodeToString
+        for (Node child : node.subtrees) {
+            result.append(nodeToString(child, level + 1)); // Incrementa o nível para representar a árvore
+        }
+
+        return result.toString();
+    }
+
 }
