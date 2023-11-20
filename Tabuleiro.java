@@ -1,6 +1,7 @@
 public class Tabuleiro {
 
     private int[][] tabuleiro;
+    private int jogadas;
     
     Tabuleiro(int[][] tabuleiro){
         this.tabuleiro = tabuleiro;
@@ -8,6 +9,10 @@ public class Tabuleiro {
 
     public int[][] getTabuleiro1(){        
         return tabuleiro;
+    }
+
+    public int getJogadas(){
+        return jogadas;
     }
 
     @Override

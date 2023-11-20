@@ -135,28 +135,28 @@ public class GeneralTree implements IAlgorithms{
     }
 
     public Node getNode(int[][] element) {
-            return getNodeRecursive(root, element);
-        }
+        return getNodeRecursive(root, element);
+    }
         
-        private Node getNodeRecursive(Node current, int[][] element) {
-            if (current == null) {
-                return null;
-            }
-        
-            if (Arrays.deepEquals(current.getElement(), element)) {
-                return current;
-            }
-        
-            for (Node child : current.subtrees) {
-                Node foundNode = getNodeRecursive(child, element);
-                if (foundNode != null) {
-                    return foundNode;
-                }
-            }
-        
+    private Node getNodeRecursive(Node current, int[][] element) {
+        if (current == null) {
             return null;
         }
     
+        if (Arrays.deepEquals(current.getElement(), element)) {
+            return current;
+        }
+    
+        for (Node child : current.subtrees) {
+            Node foundNode = getNodeRecursive(child, element);
+            if (foundNode != null) {
+                return foundNode;
+            }
+        }
+    
+        return null;
+    }
+
     // Retorna uma lista com todos os elementos da árvore numa ordem de 
     // caminhamento em largura
     public LinkedList<int[][]> positionsWidth() {
@@ -206,7 +206,8 @@ public class GeneralTree implements IAlgorithms{
                 positionsPosAux(n.getSubtree(i),lista);
             lista.add(n.element); // visita a raiz            
         }    
-    }    
+    }   
+
     public void solveBreadthFirstl(int initialMatrix[][], int finalMatrix[][], int x, int y){
         LinkedList<int[][]> lista = new LinkedList<>();
         GeneralTree arv = new GeneralTree();
@@ -235,34 +236,34 @@ public class GeneralTree implements IAlgorithms{
     }
 
     public void solveBreadthFirst(int[][] initialMatrix, int[][] finalMatrix, int x, int y) {
-    GeneralTree arv = new GeneralTree();
-    arv.add(initialMatrix, null); // Root
-    initialMatrix.toString();
-    Queue<Node> fila = new Queue<>();
-    HashSet<Node> visitados = new HashSet<>(); // Adicione esta linha para marcar nós visitados
-    Node atual = null;
-    fila.enqueue(arv.getNode(initialMatrix));
-    
-    while (!fila.isEmpty()) {
-        atual = fila.dequeue();
-        visitados.add(atual); // Marcar o nó como visitado
+        GeneralTree arv = new GeneralTree();
+        arv.add(initialMatrix, null); // Root
+        System.out.println(Arrays.deepToString(initialMatrix));
+        Queue<Node> fila = new Queue<>();
+        HashSet<Node> visitados = new HashSet<>(); // Adicione esta linha para marcar nós visitados
+        Node atual = null;
+        fila.enqueue(arv.getNode(initialMatrix));
+        
+        while (!fila.isEmpty()) {
+            atual = fila.dequeue();
+            visitados.add(atual); // Marcar o nó como visitado
 
-        int[][] aux = atual.getElement();
+            int[][] aux = atual.getElement();
 
-        // Verifique se o estado atual é a solução
-        if (isSolution(aux, finalMatrix)) {
-            aux.toString();
-            System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.");
-            return;
+            // Verifique se o estado atual é a solução
+            if (isSolution(aux, finalMatrix)) {
+                System.out.println(Arrays.deepToString(aux));
+                System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.");
+                return;
+            }
+
+            // Gere os estados filhos movendo o zero para cima, baixo, esquerda ou direita
+            generateAndAddChild(arv, fila, aux, x, y, x - 1, y, visitados); // Movimento para cima
+            generateAndAddChild(arv, fila, aux, x, y, x + 1, y, visitados); // Movimento para baixo
+            generateAndAddChild(arv, fila, aux, x, y, x, y - 1, visitados); // Movimento para a esquerda
+            generateAndAddChild(arv, fila, aux, x, y, x, y + 1, visitados); // Movimento para a direita
         }
-
-        // Gere os estados filhos movendo o zero para cima, baixo, esquerda ou direita
-        generateAndAddChild(arv, fila, aux, x, y, x - 1, y, visitados); // Movimento para cima
-        generateAndAddChild(arv, fila, aux, x, y, x + 1, y, visitados); // Movimento para baixo
-        generateAndAddChild(arv, fila, aux, x, y, x, y - 1, visitados); // Movimento para a esquerda
-        generateAndAddChild(arv, fila, aux, x, y, x, y + 1, visitados); // Movimento para a direita
     }
-}
 
 private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
                                         int[][] parentMatrix, int zeroRow, int zeroCol,
@@ -275,7 +276,7 @@ private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
         if (!visitados.contains(childNode)) {
             arv.add(childMatrix, parentMatrix); // Adicione o nó à árvore
             fila.enqueue(childNode); // Adicione o nó à fila
-            childMatrix.toString();
+            System.out.println(Arrays.deepToString(childMatrix));
         }
     }
 }
@@ -314,9 +315,32 @@ private static void generateAndAddChild(GeneralTree arv, Queue<Node> fila,
     }
 
     
+    public int calculateHeuristic(int[][] currentBoard, int[][] goalBoard){
+        int heuristic = 0;
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                int value = currentBoard[i][j];
+                if (value != 0){
+                    int goalRow = (value - 1) / 3;
+                    int goalCol = (value - 1) % 3;
+                    int distance = Math.abs(i - goalRow) + Math.abs(j - goalCol);
+                    heuristic += distance;
+                }
+            }
+        }
+        return heuristic;
+    }
+
+    int calculateTotalCost(Tabuleiro currentBoard, int[][] goalBoard) {
+        int g = currentBoard.getJogadas();
+        int h = calculateHeuristic(currentBoard.getTabuleiro1(), goalBoard);
+        return g + h;
+    }
+
     public void solveAStar(int initialMatrix[][], int finalMatrix[][], int x, int y){
 
     }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
