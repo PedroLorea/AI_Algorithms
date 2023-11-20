@@ -35,9 +35,9 @@ public class Main {
             {4, 8, 5}
        };
 
-       arv.add(tabuleiro1, null);       
-       Tabuleiro tabuleiro = new Tabuleiro(tabuleiro1);
-       System.out.println(tabuleiro);
+       //arv.add(tabuleiro1, null);       
+       //Tabuleiro tabuleiro = new Tabuleiro(tabuleiro1);
+       //System.out.println(tabuleiro);
        int opcao = 0;
        do{
             System.out.println("Selecione a opçao desejada:");
@@ -51,6 +51,7 @@ public class Main {
             opcao = teclado.nextInt();
             if(opcao == 1){
                 System.out.println("Tabuleiro 1: ");
+                arv.solveBreadthFirst(tabuleiro1, finalTabuleiro, 2, 0);
                 
             }
             if(opcao == 2){

@@ -33,6 +33,7 @@ public class GeneralTree implements IAlgorithms{
             }
             return subtrees.get(i);
         }
+        
         public int getSubtreesSize() {
             return subtrees.size();
         }
@@ -131,6 +132,29 @@ public class GeneralTree implements IAlgorithms{
         }
         return b;
     }
+
+    public Node getNode(int[][] element) {
+            return getNodeRecursive(root, element);
+        }
+        
+        private Node getNodeRecursive(Node current, int[][] element) {
+            if (current == null) {
+                return null;
+            }
+        
+            if (Arrays.deepEquals(current.getElement(), element)) {
+                return current;
+            }
+        
+            for (Node child : current.subtrees) {
+                Node foundNode = getNodeRecursive(child, element);
+                if (foundNode != null) {
+                    return foundNode;
+                }
+            }
+        
+            return null;
+        }
     
     // Retorna uma lista com todos os elementos da árvore numa ordem de 
     // caminhamento em largura
@@ -210,20 +234,24 @@ public class GeneralTree implements IAlgorithms{
     }
 
     public void solveBreadthFirst(int[][] initialMatrix, int[][] finalMatrix, int x, int y) {
+        initialMatrix.toString();
         GeneralTree arv = new GeneralTree();
         arv.add(initialMatrix, null); // Root
         Queue<Node> fila = new Queue<>();
         Node atual = null;
         fila.enqueue(root);
-
+        fila.toString();
         while (!fila.isEmpty()) {
+            System.out.println("Entrou no while");
+            System.out.println("Tamanho da fila " + fila.size());
+            fila.toString();
             atual = fila.dequeue();
             int[][] aux = atual.getElement();
 
             // Verifique se o estado atual é a solução
             if (isSolution(aux, finalMatrix)) {
                 aux.toString();
-                System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.")
+                System.out.println("Encontrou a solução em " + atual.getSubtreesSize() + " nodos.");
                 return;
             }
 
@@ -241,7 +269,8 @@ public class GeneralTree implements IAlgorithms{
         if (isValidPosition(newZeroRow, newZeroCol, parentMatrix.length, parentMatrix[0].length)) {
             int[][] childMatrix = createChildMatrix(parentMatrix, zeroRow, zeroCol, newZeroRow, newZeroCol);
             arv.add(childMatrix, parentMatrix); // Adicione o nó à árvore
-            fila.add(arv.getNode(childMatrix)); // Adicione o nó à fila
+            fila.enqueue(arv.getNode(childMatrix)); // Adicione o nó à fila
+            childMatrix.toString();
         }
     }
 
