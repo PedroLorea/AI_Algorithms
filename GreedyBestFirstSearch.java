@@ -55,7 +55,7 @@ public class GreedyBestFirstSearch {
         HashSet<Node> visited = new HashSet<>();
         priorityQueue.add(initialNode);
 
-        Map<Node, Node> parentMap = new HashMap<>();  // Mapa para rastrear o pai de cada nó
+        Map<Node, Node> parentMap = new HashMap<>();  // Mapa para pegar o parent dos nodos
 
         while (!priorityQueue.isEmpty()) {
             Node currentNode = priorityQueue.poll();
@@ -68,7 +68,6 @@ public class GreedyBestFirstSearch {
 
             visited.add(currentNode);
 
-            // Obter os sucessores como nós
             for (Node successor : generateSuccessors(currentNode, initialState)) {
                 if (!visited.contains(successor)) {
                     priorityQueue.add(successor);
@@ -80,20 +79,20 @@ public class GreedyBestFirstSearch {
         System.out.println("Sem solução encontrada.");
     }
 
-    // Função heurística - distância de Manhattan para nós
+    // Função heurística - distância de Manhattan para Nodos
     private static int heuristic(Node node1, Node node2) {
         return Math.abs(node1.getX() - node2.getX()) + Math.abs(node1.getY() - node2.getY());
     }
 
 
-    // Função para gerar os sucessores como nós
+    // Função para gerar os sucessores como Nodos
     public static HashSet<Node> generateSuccessors(Node currentNode, State currentState) {
         HashSet<Node> successors = new HashSet<>();
 
         int x = currentNode.getX();
         int y = currentNode.getY();
 
-        // Movimentos possíveis: cima, baixo, esquerda, direita
+        // cima, baixo, esquerda, direita
         int[][] moves = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         for (int[] move : moves) {
@@ -101,7 +100,7 @@ public class GreedyBestFirstSearch {
             int newCol = y + move[1];
 
             if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3) {
-                // Criar um novo nó sucessor
+                // Criar um novo nodo sucessor
                 int newValue = currentState.board[newRow][newCol];
                 Node successor = new Node(newRow, newCol, newValue);
                 successors.add(successor);
@@ -112,7 +111,7 @@ public class GreedyBestFirstSearch {
     }
 
 
-    // Função para imprimir a solução
+    // Função para imprimir o resultado
     private static void printSolution(Node node, Map<Node, Node> parentMap, State initialState) {
         System.out.println("Sequência de Estados da Solução:");
         while (node != null) {
@@ -122,7 +121,7 @@ public class GreedyBestFirstSearch {
         }
     }
 
-    // Método auxiliar para atualizar o estado com base em um nó
+    // Método auxiliar para atualizar o estado com base em um Nodo
     private static void updateState(Node node, State currentState) {
         currentState.board[node.getX()][node.getY()] = node.getValue();
     }
