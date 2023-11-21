@@ -1,7 +1,9 @@
+package model;
+
 import java.util.HashSet;
 
-class State {
-    int[][] board;
+public class State {
+    public int[][] board;
 
     public State(int[][] board) {
         this.board = board;

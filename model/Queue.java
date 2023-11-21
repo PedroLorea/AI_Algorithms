@@ -1,4 +1,4 @@
-/*
+package model;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -38,13 +38,13 @@ public class Queue<E> {
 
     public E dequeue() throws EmptyQueueException {
         if (fila.isEmpty()) {
-            throw new EmptyQueueException("Queue is empty!");
+            throw new EmptyQueueException("datastructures.Queue is empty!");
         } else {
             E elem = fila.remove(0);
             if (elem != null) {
                 return elem;
             } else {
-                throw new EmptyQueueException("Queue is empty!");
+                throw new EmptyQueueException("datastructures.Queue is empty!");
             }
         }
     }

@@ -1,3 +1,5 @@
+package algorithms;
+
 public interface IAlgorithms {
     
     void solveBreadthFirst(int initialMatrix[][], int finalMatrix[][], int x, int y);

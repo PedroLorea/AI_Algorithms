@@ -1,9 +1,10 @@
+package model;
 public class Tabuleiro {
 
     private final int[][] tabuleiro;
 
     
-    Tabuleiro(int[][] tabuleiro){
+    public Tabuleiro(int[][] tabuleiro){
         this.tabuleiro = tabuleiro;
     }
 
@@ -83,5 +84,27 @@ public class Tabuleiro {
         resultado.append("----------------");
 
         System.out.println(resultado);
+    }
+
+    public int getZeroRow() {
+        for (int i = 0; i < tabuleiro.length; i++) {
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+                if (tabuleiro[i][j] == 0) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int getZeroCol() {
+        for (int i = 0; i < tabuleiro.length; i++) {
+            for (int j = 0; j < tabuleiro[i].length; j++) {
+                if (tabuleiro[i][j] == 0) {
+                    return j;
+                }
+            }
+        }
+        return -1;
     }
 }
